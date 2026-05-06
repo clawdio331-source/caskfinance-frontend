@@ -1,0 +1,541 @@
+.widget {
+  display: grid;
+  justify-items: center;
+  gap: 22px;
+  width: 100%;
+}
+
+.segmented {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px;
+  border: 1px solid #2a2218;
+  border-radius: 999px;
+  background: #14100b;
+}
+
+.segment,
+.segmentActive {
+  min-width: 74px;
+  padding: 10px 24px;
+  border: 0;
+  border-radius: 999px;
+  color: #f4ecdc;
+  background: transparent;
+  cursor: pointer;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  transition:
+    background 180ms ease,
+    color 180ms ease,
+    opacity 180ms ease;
+}
+
+.segmentActive {
+  background: #d4a24c;
+  color: #0c0907;
+}
+
+.segment:disabled,
+.segmentActive:disabled {
+  cursor: default;
+}
+
+.hookToggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  color: #d9cfbb;
+  cursor: pointer;
+  font-size: 14px;
+  line-height: 1;
+}
+
+.hookToggle input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.hookToggle span {
+  position: relative;
+  width: 16px;
+  height: 16px;
+  border: 1px solid #d4a24c;
+  border-radius: 4px;
+  background: #14100b;
+  transition:
+    background 180ms ease,
+    box-shadow 180ms ease;
+}
+
+.hookToggle span::after {
+  content: "";
+  position: absolute;
+  left: 4px;
+  top: 1px;
+  width: 5px;
+  height: 9px;
+  border-right: 2px solid #ffffff;
+  border-bottom: 2px solid #ffffff;
+  opacity: 0;
+  transform: rotate(45deg);
+}
+
+.hookToggle input:checked + span {
+  background: #d4a24c;
+  box-shadow: 0 0 18px rgba(212, 162, 76, 0.28);
+}
+
+.hookToggle input:checked + span::after {
+  opacity: 1;
+}
+
+.hookToggle input:disabled + span,
+.hookToggle input:disabled ~ * {
+  opacity: 0.5;
+}
+
+.challenge {
+  display: grid;
+  justify-items: center;
+  gap: 7px;
+  text-align: center;
+}
+
+.challenge span,
+.optional {
+  color: #d4a24c;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+.challenge p {
+  margin: 0;
+  color: #d9cfbb;
+  font-size: 16px;
+  line-height: 1.45;
+}
+
+.pipelineCard {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  min-height: 176px;
+  padding: 36px;
+  border: 1px solid #1f1810;
+  border-radius: 14px;
+  background: #14100b;
+}
+
+.pipelineFlow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  width: 100%;
+}
+
+.pipelineStep {
+  display: contents;
+}
+
+.routeSlot {
+  display: grid;
+  place-items: center;
+  align-content: center;
+  width: 200px;
+  height: 60px;
+  padding: 8px 14px;
+  border: 1px dashed rgba(157, 142, 120, 0.5);
+  border-radius: 10px;
+  background: rgba(12, 9, 7, 0.52);
+  color: #9d8e78;
+  text-align: center;
+  transition:
+    border-color 200ms ease,
+    box-shadow 200ms ease,
+    opacity 200ms ease,
+    transform 200ms ease;
+}
+
+.routeSlot > span {
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.filledSlot {
+  border: 1px solid #2a2218;
+  background: #14100b;
+  color: #f4ecdc;
+}
+
+.routeSlot strong {
+  color: #f4ecdc;
+  font-size: 17px;
+  font-weight: 500;
+  line-height: 1.1;
+}
+
+.routeSlot small {
+  margin-top: 4px;
+  color: #9d8e78;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.15;
+}
+
+.hookSlot {
+  border: 1.5px solid #d4a24c;
+}
+
+.activeSlot {
+  border-color: #d4a24c;
+  box-shadow: 0 0 24px rgba(212, 162, 76, 0.45);
+  transform: scale(1.02);
+}
+
+.hookSlot.activeSlot {
+  border-color: #e8b85c;
+}
+
+.dimmedSlot {
+  opacity: 0.4;
+}
+
+.optional {
+  align-self: end;
+  margin: 0 0 8px -200px;
+  transform: translateX(200px);
+}
+
+.arrow {
+  width: 32px;
+  height: 16px;
+  margin: 0 10px;
+  overflow: visible;
+}
+
+.arrow marker path {
+  fill: #9d8e78;
+  transition: fill 200ms ease;
+}
+
+.arrowLine {
+  fill: none;
+  stroke: #9d8e78;
+  stroke-width: 1;
+  stroke-dasharray: 32;
+  stroke-dashoffset: 0;
+  transition: stroke 200ms ease;
+}
+
+.arrowActive marker path {
+  fill: #d4a24c;
+}
+
+.arrowActive .arrowLine {
+  stroke: #d4a24c;
+  animation: drawArrow 250ms ease forwards;
+}
+
+.primitiveDeck {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(110px, 1fr));
+  gap: 10px;
+  width: min(780px, 100%);
+}
+
+.primitiveCard,
+.hookCard {
+  position: relative;
+  display: flex;
+  align-items: stretch;
+  min-height: 68px;
+  border: 1px solid #2a2218;
+  border-radius: 10px;
+  background: linear-gradient(180deg, #14100b 0%, #0c0907 100%);
+  color: #f4ecdc;
+  overflow: hidden;
+  transition:
+    border-color 180ms ease,
+    transform 180ms ease;
+}
+
+.hookCard {
+  border-color: rgba(212, 162, 76, 0.55);
+}
+
+.primitiveCard:hover,
+.hookCard:hover,
+.cardSelected {
+  border-color: #d4a24c;
+}
+
+.primitiveCard:hover,
+.hookCard:hover {
+  transform: translateY(-1px);
+}
+
+.cardAdd {
+  display: grid;
+  flex: 1;
+  gap: 5px;
+  min-width: 0;
+  padding: 13px 34px 13px 12px;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  font: inherit;
+  text-align: left;
+}
+
+.cardAdd:disabled {
+  cursor: default;
+  opacity: 0.45;
+}
+
+.cardAdd strong {
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.1;
+}
+
+.cardAdd span {
+  color: #9d8e78;
+  font-size: 11px;
+  line-height: 1.25;
+}
+
+.infoButton {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  display: grid;
+  place-items: center;
+  width: 18px;
+  height: 18px;
+  border: 1px solid rgba(212, 162, 76, 0.65);
+  border-radius: 50%;
+  background: rgba(12, 9, 7, 0.78);
+  color: #d4a24c;
+  cursor: pointer;
+  font: inherit;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1;
+  transition:
+    background 160ms ease,
+    color 160ms ease,
+    transform 160ms ease;
+}
+
+.infoButton:hover {
+  background: #d4a24c;
+  color: #0c0907;
+  transform: scale(1.04);
+}
+
+.infoPanel {
+  display: grid;
+  grid-template-columns: minmax(120px, 0.28fr) 1fr;
+  gap: 20px;
+  width: min(780px, 100%);
+  padding: 18px 20px;
+  border: 1px solid #2a2218;
+  border-radius: 12px;
+  background: rgba(20, 16, 11, 0.78);
+}
+
+.infoPanel span {
+  color: #d4a24c;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+.infoPanel h3 {
+  margin: 6px 0 0;
+  color: #f4ecdc;
+  font-size: 17px;
+  font-weight: 500;
+  line-height: 1.1;
+}
+
+.infoPanel p {
+  margin: 0;
+  color: #d9cfbb;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.feedback {
+  min-height: 22px;
+  margin: 0;
+  color: #9d8e78;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.feedback-error {
+  color: #e8b85c;
+}
+
+.feedback-success {
+  color: #f4ecdc;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 9px;
+}
+
+.secondaryButton,
+.runButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 46px;
+  border-radius: 999px;
+  cursor: pointer;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  transition:
+    background 180ms ease,
+    border-color 180ms ease,
+    color 180ms ease,
+    opacity 180ms ease,
+    transform 180ms ease;
+}
+
+.secondaryButton {
+  padding: 0 18px;
+  border: 1px solid #2a2218;
+  background: #14100b;
+  color: #d9cfbb;
+}
+
+.secondaryButton:hover {
+  border-color: #d4a24c;
+  color: #f4ecdc;
+}
+
+.runButton {
+  gap: 10px;
+  padding: 0 24px;
+  border: 1px solid transparent;
+  background: linear-gradient(180deg, #e8b85c 0%, #d4a24c 100%);
+  box-shadow:
+    0 1px 0 rgba(255, 220, 150, 0.4) inset,
+    0 10px 30px -12px rgba(212, 162, 76, 0.6);
+  color: #1a1209;
+  text-transform: lowercase;
+}
+
+.runButton:hover {
+  background: linear-gradient(180deg, #f1c878 0%, #e8b85c 100%);
+}
+
+.secondaryButton:active,
+.runButton:active {
+  transform: translateY(1px);
+}
+
+.secondaryButton:disabled,
+.runButton:disabled {
+  cursor: default;
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+@keyframes drawArrow {
+  from {
+    stroke-dashoffset: 32;
+  }
+
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@media (max-width: 900px) {
+  .primitiveDeck {
+    grid-template-columns: repeat(3, minmax(120px, 1fr));
+  }
+}
+
+@media (max-width: 720px) {
+  .widget {
+    gap: 20px;
+  }
+
+  .pipelineCard {
+    padding: 28px 16px;
+  }
+
+  .pipelineFlow {
+    flex-direction: column;
+  }
+
+  .pipelineStep {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .routeSlot {
+    width: min(260px, 100%);
+  }
+
+  .optional {
+    margin: 0 0 8px;
+    transform: none;
+  }
+
+  .arrow {
+    margin: 14px 0;
+    transform: rotate(90deg);
+  }
+
+  .primitiveDeck {
+    grid-template-columns: 1fr;
+  }
+
+  .primitiveCard,
+  .hookCard {
+    min-height: 64px;
+  }
+
+  .infoPanel {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    width: min(100%, 360px);
+  }
+
+  .runButton {
+    grid-column: 1 / -1;
+  }
+}

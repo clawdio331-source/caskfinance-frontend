@@ -1,0 +1,262 @@
+.shell {
+  --oak: #0c0907;
+  --oak-2: #14100b;
+  --oak-3: #1b1610;
+  --cream: #f4ecdc;
+  --cream-dim: #d9cfbb;
+  --tan: #9d8e78;
+  --amber: #d4a24c;
+  --amber-bright: #e8b85c;
+  --line: #2a2218;
+  --line-soft: #1f1810;
+
+  position: relative;
+  min-height: 100vh;
+  overflow-x: hidden;
+  background:
+    radial-gradient(ellipse 80% 62% at 50% 30%, var(--oak-3) 0%, var(--oak) 68%),
+    var(--oak);
+  color: var(--cream);
+  font-family: var(--font-sans), Inter, ui-sans-serif, system-ui, sans-serif;
+}
+
+.shell::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.85 0 0 0 0 0.7 0 0 0 0 0.45 0 0 0 0.5 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/></svg>");
+  mix-blend-mode: overlay;
+  opacity: 0.5;
+}
+
+.container {
+  position: relative;
+  z-index: 1;
+  width: min(1200px, calc(100% - 48px));
+  margin: 0 auto;
+  padding: 80px 0 64px;
+}
+
+.eyebrow,
+.explainer h2 {
+  margin: 0;
+  color: var(--tan);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+.header {
+  max-width: 760px;
+  margin-top: 96px;
+}
+
+.header h1 {
+  margin: 0;
+  color: var(--cream);
+  font-family: var(--font-serif), Fraunces, Georgia, serif;
+  font-size: clamp(36px, 5vw, 56px);
+  font-weight: 300;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+}
+
+.header p {
+  max-width: 620px;
+  margin: 18px 0 0;
+  color: var(--cream-dim);
+  font-size: 18px;
+  line-height: 1.5;
+}
+
+.header span {
+  display: block;
+  width: 40px;
+  height: 1px;
+  margin-top: 24px;
+  background: var(--amber);
+}
+
+.gameSlot {
+  width: min(1000px, 100%);
+  min-height: 420px;
+  margin: 56px auto 0;
+}
+
+.explainer {
+  width: min(800px, 100%);
+  margin: 80px auto 0;
+  padding: 32px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--oak-2);
+}
+
+.explainerBody {
+  margin-top: 18px;
+  color: var(--cream-dim);
+  font-size: 16px;
+  line-height: 1.55;
+}
+
+.explainerBody p {
+  margin: 0;
+}
+
+.footer {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 24px;
+  align-items: center;
+  width: 100%;
+  margin-top: 96px;
+}
+
+.footer div:last-child {
+  text-align: right;
+}
+
+.footer a {
+  color: var(--tan);
+  font-size: 14px;
+  text-decoration: none;
+  transition: color 160ms ease;
+}
+
+.footer a:hover {
+  color: var(--cream);
+}
+
+.footer span {
+  color: var(--cream-dim);
+  font-size: 12px;
+  letter-spacing: 0.04em;
+}
+
+.corner {
+  position: fixed;
+  top: 64px;
+  z-index: 2;
+  width: 160px;
+  height: 160px;
+  pointer-events: none;
+}
+
+.corner::before,
+.corner::after {
+  content: "";
+  position: absolute;
+  background: var(--amber);
+}
+
+.corner::before {
+  top: 0;
+  width: 160px;
+  height: 1.4px;
+}
+
+.corner::after {
+  top: 0;
+  width: 1.4px;
+  height: 160px;
+}
+
+.cornerLeft {
+  left: 64px;
+}
+
+.cornerLeft::before,
+.cornerLeft::after {
+  left: 0;
+}
+
+.cornerRight {
+  right: 64px;
+}
+
+.cornerRight::before,
+.cornerRight::after {
+  right: 0;
+}
+
+.cornerLeft {
+  background: radial-gradient(circle at 0 0, var(--amber) 0 3.5px, transparent 3.6px);
+}
+
+.cornerRight {
+  background: radial-gradient(circle at 100% 0, var(--amber) 0 3.5px, transparent 3.6px);
+}
+
+.watermark {
+  position: fixed;
+  right: 32px;
+  bottom: 32px;
+  z-index: 3;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--cream);
+  text-decoration: none;
+}
+
+.watermark span {
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  border: 1px solid var(--amber);
+  border-radius: 50%;
+  color: var(--amber);
+  font-family: var(--font-serif), Fraunces, Georgia, serif;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.watermark strong {
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+}
+
+@media (max-width: 720px) {
+  .container {
+    width: min(100% - 32px, 1200px);
+    padding: 56px 0 48px;
+  }
+
+  .corner {
+    display: none;
+  }
+
+  .header {
+    margin-top: 48px;
+  }
+
+  .gameSlot {
+    min-height: 420px;
+    margin-top: 36px;
+  }
+
+  .explainer {
+    margin-top: 56px;
+    padding: 24px;
+  }
+
+  .footer {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    margin-top: 64px;
+    text-align: center;
+  }
+
+  .footer div:last-child {
+    text-align: center;
+  }
+
+  .watermark {
+    right: 16px;
+    bottom: 16px;
+  }
+}
