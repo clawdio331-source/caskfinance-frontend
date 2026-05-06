@@ -16,20 +16,17 @@ const fraunces = Fraunces({
 });
 
 export const metadata: Metadata = {
-  title: "Cask — A stablecoin that fights for its peg",
-  description:
-    "Cask ships peg defense inside the swap. Atomic, in-block, every trade. Early access on Telegram.",
+  title: "Cask — It's just a cask bro",
+  description: "A sealed Cask whitelist landing. Telegram access and Twitter updates.",
   openGraph: {
-    title: "Cask — A stablecoin that fights for its peg",
-    description:
-      "Atomic peg defense. In-block profit splits. Engineered to age. Early access on Telegram.",
+    title: "Cask — It's just a cask bro",
+    description: "A sealed Cask whitelist landing. Telegram access and Twitter updates.",
     type: "website"
   },
   twitter: {
     card: "summary_large_image",
-    title: "Cask — A stablecoin that fights for its peg",
-    description:
-      "Atomic peg defense. In-block profit splits. Engineered to age."
+    title: "Cask — It's just a cask bro",
+    description: "A sealed Cask whitelist landing."
   }
 };
 
