@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import ComingSoon from "../_components/ComingSoon";
 import PlayShell from "../_components/PlayShell";
-import { DAYS, dayById } from "../_data/days";
+import { DAYS, dayById, isReleasedDayNumber } from "../_data/days";
 import SwapRouting from "../_games/SwapRouting";
 import s from "./page.module.css";
 
@@ -13,9 +13,12 @@ type PlayPageProps = {
 };
 
 function dayNav(dayNumber: number) {
+  const prevDay = dayNumber > 1 && isReleasedDayNumber(dayNumber - 1) ? dayNumber - 1 : undefined;
+  const nextDay = dayNumber < DAYS.length && isReleasedDayNumber(dayNumber + 1) ? dayNumber + 1 : undefined;
+
   return {
-    prevDay: dayNumber > 1 ? dayNumber - 1 : undefined,
-    nextDay: dayNumber < DAYS.length ? dayNumber + 1 : undefined
+    prevDay,
+    nextDay
   };
 }
 

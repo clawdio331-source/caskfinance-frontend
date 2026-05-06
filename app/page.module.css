@@ -220,14 +220,6 @@
   text-shadow: 0 18px 50px rgba(0, 0, 0, 0.58);
 }
 
-.subhead {
-  margin: 22px 0 0;
-  color: var(--paper-muted);
-  font-size: clamp(15px, 2vw, 19px);
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-}
-
 .access {
   position: absolute;
   left: 50%;
@@ -437,11 +429,6 @@
 
   .headline {
     font-size: clamp(44px, 16vw, 74px);
-  }
-
-  .subhead {
-    font-size: 12px;
-    letter-spacing: 0.08em;
   }
 
   .access {

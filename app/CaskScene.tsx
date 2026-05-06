@@ -85,6 +85,7 @@ export default function CaskScene({ telegramUrl, twitterUrl }: CaskSceneProps) {
   const hitCountRef = useRef(0);
   const unlockedRef = useRef(false);
   const lastStrikeAtRef = useRef<number | null>(null);
+  const redirectTimerRef = useRef<number | null>(null);
   const [hitCount, setHitCount] = useState(0);
   const [isUnlocked, setIsUnlocked] = useState(false);
   const [sceneFailed, setSceneFailed] = useState(false);
@@ -92,7 +93,7 @@ export default function CaskScene({ telegramUrl, twitterUrl }: CaskSceneProps) {
   const remainingHits = Math.max(0, HIT_TARGET - hitCount);
   const actionLabel = useMemo(() => {
     if (isUnlocked) {
-      return "Enter Telegram";
+      return "Opening Telegram";
     }
 
     if (hitCount === 0) {
@@ -100,7 +101,7 @@ export default function CaskScene({ telegramUrl, twitterUrl }: CaskSceneProps) {
     }
 
     if (remainingHits === 1) {
-      return "One more tap";
+      return "Final tap";
     }
 
     return `${remainingHits} taps left`;
@@ -120,8 +121,19 @@ export default function CaskScene({ telegramUrl, twitterUrl }: CaskSceneProps) {
     if (nextHitCount >= HIT_TARGET) {
       unlockedRef.current = true;
       setIsUnlocked(true);
+      redirectTimerRef.current = window.setTimeout(() => {
+        window.location.assign(telegramUrl);
+      }, 320);
     }
   }, [telegramUrl]);
+
+  useEffect(() => {
+    return () => {
+      if (redirectTimerRef.current !== null) {
+        window.clearTimeout(redirectTimerRef.current);
+      }
+    };
+  }, []);
 
   useEffect(() => {
     const mount = mountRef.current;
@@ -381,12 +393,38 @@ export default function CaskScene({ telegramUrl, twitterUrl }: CaskSceneProps) {
       color: 0xf0bd4f,
       transparent: true,
       opacity: 0,
-      depthTest: false,
+      depthTest: true,
       depthWrite: false
     });
-    const stream = new THREE.Mesh(new THREE.CylinderGeometry(0.04, 0.07, 1, 18), streamMaterial);
+    const stream = new THREE.Mesh(new THREE.CylinderGeometry(0.03, 0.018, 1, 22, 1, true), streamMaterial);
+    stream.renderOrder = -1;
     stream.visible = false;
     scene.add(stream);
+
+    const streamHighlightMaterial = new THREE.MeshBasicMaterial({
+      color: 0xffe29a,
+      transparent: true,
+      opacity: 0,
+      depthTest: true,
+      depthWrite: false
+    });
+    const streamHighlight = new THREE.Mesh(new THREE.CylinderGeometry(0.006, 0.004, 1, 8, 1, true), streamHighlightMaterial);
+    streamHighlight.visible = false;
+    scene.add(streamHighlight);
+
+    const dropletMaterial = new THREE.MeshBasicMaterial({
+      color: 0xf6cc68,
+      transparent: true,
+      opacity: 0,
+      depthTest: true,
+      depthWrite: false
+    });
+    const droplets = Array.from({ length: 3 }, () => {
+      const droplet = new THREE.Mesh(new THREE.SphereGeometry(0.025, 14, 10), dropletMaterial);
+      droplet.visible = false;
+      scene.add(droplet);
+      return droplet;
+    });
 
     const puddleMaterial = new THREE.MeshBasicMaterial({
       color: 0xc3842d,
@@ -408,6 +446,7 @@ export default function CaskScene({ telegramUrl, twitterUrl }: CaskSceneProps) {
     const streamMid = new THREE.Vector3();
     const streamDirection = new THREE.Vector3();
     const streamAxis = new THREE.Vector3(0, 1, 0);
+    const streamHighlightOffset = new THREE.Vector3();
 
     function resize() {
       const width = mountEl.clientWidth || window.innerWidth;
@@ -426,12 +465,18 @@ export default function CaskScene({ telegramUrl, twitterUrl }: CaskSceneProps) {
       if (!unlocked) {
         streamMaterial.opacity = Math.max(0, streamMaterial.opacity - delta * 1.8);
         stream.visible = streamMaterial.opacity > 0.01;
+        streamHighlightMaterial.opacity = Math.max(0, streamHighlightMaterial.opacity - delta * 2.4);
+        streamHighlight.visible = streamHighlightMaterial.opacity > 0.01;
+        dropletMaterial.opacity = Math.max(0, dropletMaterial.opacity - delta * 2.4);
+        droplets.forEach((droplet) => {
+          droplet.visible = dropletMaterial.opacity > 0.01;
+        });
         puddleMaterial.opacity = Math.max(0, puddleMaterial.opacity - delta * 0.28);
         return;
       }
 
-      streamStart.set(0, -0.2, 1.62).applyMatrix4(cask.matrixWorld);
-      streamEnd.set(streamStart.x + Math.sin(performance.now() * 0.004) * 0.035, -1.64, streamStart.z + 0.04);
+      streamStart.set(0, -0.078, 0.56).applyMatrix4(tap.matrixWorld);
+      streamEnd.set(streamStart.x + Math.sin(performance.now() * 0.004) * 0.026, -1.64, streamStart.z + 0.045);
       streamDirection.subVectors(streamEnd, streamStart);
       const streamLength = Math.max(0.2, streamDirection.length());
       streamMid.addVectors(streamStart, streamEnd).multiplyScalar(0.5);
@@ -439,9 +484,32 @@ export default function CaskScene({ telegramUrl, twitterUrl }: CaskSceneProps) {
       stream.quaternion.setFromUnitVectors(streamAxis, streamDirection.normalize());
       stream.scale.set(1, streamLength, 1);
       stream.visible = true;
-      streamMaterial.opacity = Math.min(0.68, streamMaterial.opacity + delta * 2.2);
+      streamMaterial.opacity = Math.min(0.72, streamMaterial.opacity + delta * 2.2);
+
+      streamHighlightOffset.set(-0.012, 0, 0.004);
+      streamHighlight.position.copy(streamMid).add(streamHighlightOffset);
+      streamHighlight.quaternion.copy(stream.quaternion);
+      streamHighlight.scale.set(1, streamLength * 0.96, 1);
+      streamHighlight.visible = true;
+      streamHighlightMaterial.opacity = Math.min(0.46, streamHighlightMaterial.opacity + delta * 2.8);
+
+      dropletMaterial.opacity = Math.min(0.62, dropletMaterial.opacity + delta * 2.4);
+      droplets.forEach((droplet, index) => {
+        const phase = (performance.now() * 0.0015 + index / droplets.length) % 1;
+        const drift = Math.sin(phase * Math.PI * 2 + index) * 0.022;
+        droplet.visible = streamMaterial.opacity > 0.24;
+        droplet.position.set(
+          streamStart.x + drift,
+          streamStart.y + (streamEnd.y - streamStart.y) * phase,
+          streamStart.z + 0.026 + Math.cos(phase * Math.PI * 2) * 0.008
+        );
+        droplet.scale.setScalar(0.72 + phase * 0.5);
+      });
+
       puddleSize = clamp(puddleSize + delta * 0.22, 0, 1);
       puddleMaterial.opacity = 0.12 + puddleSize * 0.38;
+      puddle.position.x += (streamEnd.x - puddle.position.x) * 0.08;
+      puddle.position.z += (streamEnd.z - puddle.position.z) * 0.08;
       puddle.scale.set(0.18 + puddleSize * 1.08, 0.08 + puddleSize * 0.52, 1);
     }
 
@@ -537,6 +605,9 @@ export default function CaskScene({ telegramUrl, twitterUrl }: CaskSceneProps) {
           <span>Cask</span>
         </a>
         <div className={s.navLinks}>
+          <a href="/play">
+            Play
+          </a>
           <a href={twitterUrl} target="_blank" rel="noreferrer">
             Twitter
           </a>
@@ -555,11 +626,10 @@ export default function CaskScene({ telegramUrl, twitterUrl }: CaskSceneProps) {
       <div className={s.hero}>
         <p className={s.kicker}>Whitelist cellar</p>
         <h1 className={s.headline}>It&apos;s just a cask bro.</h1>
-        <p className={s.subhead}>Sealed until it isn&apos;t.</p>
       </div>
 
       <div className={s.access}>
-        <button className={s.breakButton} type="button" onClick={handleTap}>
+        <button className={s.breakButton} type="button" onClick={handleTap} disabled={isUnlocked}>
           <span className={s.tapIcon} aria-hidden="true">
             <span />
           </span>
@@ -576,7 +646,7 @@ export default function CaskScene({ telegramUrl, twitterUrl }: CaskSceneProps) {
       </div>
 
       <div className={s.footerRail}>
-        <span>{isUnlocked ? "The tap is open" : "Quietly sealed"}</span>
+        <span>{isUnlocked ? "Opening Telegram" : "Tap to pour"}</span>
         <a href={twitterUrl} target="_blank" rel="noreferrer">
           @caskfinance
         </a>
